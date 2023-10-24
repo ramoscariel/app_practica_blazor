@@ -1,0 +1,26 @@
+﻿@page "/clock"
+@using System.Timers
+
+<p> @current_hour</p>
+
+@code {
+    private Timer timer;
+    private string current_hour = "hora";
+    private DateTime date;
+
+    protected override Task OnInitializedAsync()
+    {
+        date = DateTime.Now;
+        current_hour = date.ToLongTimeString();
+        timer = new Timer(1000);
+        timer.Elapsed += OnTimerElapsed;
+        timer.Start();
+        return base.OnInitializedAsync();
+    }
+    private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        date = DateTime.Now;
+        current_hour = date.ToLongTimeString();
+        InvokeAsync(() => StateHasChanged());
+    }
+}
